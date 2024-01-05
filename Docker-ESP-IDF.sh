@@ -1,6 +1,6 @@
 # Description: This script will build the Docker Image and run the Docker Container
 #              for the ESP-IDF development environment.
-# Created: 2021-08-15 12:00:00
+# Created: Jan 4, 2024
 # Author: Marcio Reis
 
 
@@ -25,7 +25,6 @@ docker container ls | egrep "^.+\s+esp-idf" > /dev/null;
 if [ "$?" == 1 ]; then
     docker container rm esp-idf-container > /dev/null 2>&1;
     docker run -d -it --name esp-idf-container -v $(pwd):/app \
-        -v /dev/uart.wlan-debug:/dev/uart.wlan-debug \
         --privileged esp-idf;
 else
     echo "Docker Container esp-idf-container already exists";
