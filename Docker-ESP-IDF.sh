@@ -25,7 +25,7 @@ docker container ls | egrep "^.+\s+esp-idf" > /dev/null;
 if [ "$?" == 1 ]; then
     docker container rm esp-idf-container > /dev/null 2>&1;
     docker run -d -it --name esp-idf-container -v $(pwd):/app \
-        -v /dev/uart.wlan-debug:/dev/uart.wlan-debug \ ### Change this to your serial port \
+        -v /dev/uart.wlan-debug:/dev/uart.wlan-debug \
         --privileged esp-idf;
 else
     echo "Docker Container esp-idf-container already exists";
