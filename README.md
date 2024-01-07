@@ -7,6 +7,14 @@ environment by using a Docker container. The project builds on the instructions
 provided on the [Espressif](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/linux-macos-setup.html)
 web page.
 
+It uses a single script to build the Docker image with the ESP-IDF
+development environment; nothing is installed on the host. This same script
+is used to start the container and attach the current terminal to it. That is
+where the compiler (idf.py) is available to build the project.
+
+You can start as many containers as you want, and each one will have its own
+development environment to build different projects.
+
 Having the development environment in a container allows you to:
 - Have a clean and automated installation of the ESP-IDF development
 environment;
@@ -16,7 +24,12 @@ environment;
 - Easily remove the development environment from the host system.
 
 > If you try and like [this project](https://github.com/marcioreisjr/ESP-IDF-Builder),
-  please give it a star on GitHub.
+please give it a star on GitHub.
+
+## Dependencies
+- [Docker](https://docs.docker.com/get-docker/)
+- [Python 3](https://www.python.org/downloads/)
+- [Git](https://git-scm.com/downloads)
 
 ## Installation
 This system is containerized and requires the Docker app on your host
@@ -30,11 +43,12 @@ When Docker is running:
     extracting them to a directory of your choice or
   - Cloning this repository to get the latest version of these files and copying
     them to a directory of your choice;
-- Build the container by running the following command:
-    ```bash
-    ./Docker-ESP-IDF.sh
-    ```
 
+## Usage
+1. Build the container by running the following command:
+    ```bash
+    ./Docker-ESP-IDF.sh [container_name]
+    ```
 > **Note:** A large count of files will be downloaded and built
 during the first run of the script. It may take a while to complete. On my host
 system, it took about 7 minutes to complete; it had a solid average network
@@ -43,18 +57,17 @@ runs of the script.
 
 This script will:
 - Build the Docker image (named `esp-idf`) if it does not exist;
-- Create a container named `esp-idf-container` from the `esp-idf` image if it
-does not exist;
-- Start the `esp-idf-container` container;
-- Attach the current terminal to the `esp-idf-container` container.
-- After exiting the container, you can reconnect to it by running the
-`./Docker-ESP-IDF.sh` script again.
+- Create a container with the provided name, otherwise will use a
+random-generated name. This container is derived from the `esp-idf` image;
+- Start the container;
+- Attach the current terminal to the container.
+- After exiting the container, you can reconnect to it by running the script
+again and providing the same container name.
 
 > **Note:** You can exit the container by pressing `Ctrl + D` or by typing
 `exit` in the terminal.
 
-## Usage
-Once the container is running, the local directory gets mounted in the
+1. Once the container is running, the local directory gets mounted in the
 `/app` directory of the container, meaning you can edit the files in
 your favorite editor on your host system and build the project in the container.
 
@@ -76,8 +89,8 @@ docker rmi esp-idf
 ```
 
 ## Limitations
-- The script currently only works on Linux or MacOS systems. The Windows script
-is untested;
+- The script currently only works on Linux or MacOS systems. On Windows, the
+ script is still untested;
 - Connecting the ESP32 board to the container is not supported yet;
 - Limited reproducibility of the building environment. The building environment
 is reproducible as long as the Docker image is not updated. If the Docker image
